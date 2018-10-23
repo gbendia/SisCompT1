@@ -1,0 +1,3 @@
+exec prog1.c prioridade=1
+exec prog2.c prioridade=2
+exec prog3.c prioridade=3
