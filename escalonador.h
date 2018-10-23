@@ -12,4 +12,6 @@ void escalonamento (Escalonador * escalonador);
 
 void escreveStatus (Escalonador * escalonador);
 
+void gerenciaFilaNovos (Escalonador * escalonador);
+
 

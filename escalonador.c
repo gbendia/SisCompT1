@@ -105,6 +105,9 @@ void insereNoPrioridade (int prioridade, char * nomeProg, Escalonador * escalona
 		case 7:
 			aux = escalona->prioridade7;
 			break;
+		case -1:
+			aux = escalona->terminados;
+			break;
 		default:
 			aux = NULL;
 	}
@@ -183,33 +186,44 @@ void usr1handler(int signo)
 }
 
 
-void gerenciaFilaEspecifica (Fila * filaPrioridade, char * emExecucao)
+void gerenciaFilaEspecifica (Fila * filaPrioridade, char * emExecucao, Escalonador* escalonador)
 {
 	int pid;
 	int pidGerenciador = getpid();
 	char *nomeProg;
+	printf("Entrei na gerencia\n");
 	kill(getpid(), SIGSTOP);
-
+	printf("Continuei\n");
+	printf("Informacoes fila prioridade %d, numELem: %d\n", filaPrioridade->prioridade, filaPrioridade->qntElementos);
 	while(1)
 	{
 		while( !filaVazia(filaPrioridade) )
 		{
+			printf("Filho com prioridade %d executando\n", filaPrioridade->prioridade);
 			nomeProg = retiraNo (filaPrioridade);
+			printf("Nome do programa a ser executado: %s\n", nomeProg);
 			pid = fork();
 			if(pid==0) // filho executa o programa
 			{
-				execv(nomeProg, NULL);
+				printf("Está no processo filho\n");
 				strcpy(emExecucao,nomeProg);
+				execv(nomeProg, NULL);
+				exit(0);
 			}
 			else // pai dorme enquanto escalonador não avisa que ultrapassou o tempo
 			{
-				signal(SIGUSR1, usr1handler);
-				kill(getpid(), SIGSTOP);
-				
+				printf("Está no processo pai\n");
+				sleep(3);
+				printf("Pai acordou\n");
+
+				insereNoPrioridade (-1, nomeProg, escalonador); // inserir na fila de terminados
+				printf("Inseriu na fila de terminados\n");
 				//Quando volta, mata o filho
 				kill(pid, SIGKILL);
+				printf("Matou o processo executando\n");
 			}
 		}
+		printf("Pai parou\n");
 		kill(getpid(), SIGSTOP);
 	}
 }
@@ -217,45 +231,50 @@ void gerenciaFilaEspecifica (Fila * filaPrioridade, char * emExecucao)
 
 void escalonamento (Escalonador * escalonador)
 {
-	int flagTempoP6 = 0;
-	int flagTempoP7 = 0;
-	double dt;
-	clock_t primeiroTempoP6, primeiroTempoP7;
+	int flagTempos[] = {0,0,0,0,0,0,0};
+	int prioridadeAtiva;
+	double dt, maxDt;
+	clock_t primeirosTempos[7];
 	int pid[7]; //guarda os pids dos filhos
 	No * aux;
 	int i;
 
+	sleep(3);
+	printf("Comeco escalonamento\n");
+
 	for(i=0;i<7;i++)
 	{
 		pid[i] = fork(); 
-		if(pid == 0) //cada processo filho
+		if(pid[i] == 0) //cada processo filho
 		{
+			printf("Fork %d\n", i);
 			switch (i)
 			{
 				case 0:
-					gerenciaFilaEspecifica (escalonador->prioridade1, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade1, escalonador->emExecucao, escalonador);
 					break;
 				case 1:
-					gerenciaFilaEspecifica (escalonador->prioridade2, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade2, escalonador->emExecucao, escalonador);
 					break;
 				case 2:
-					gerenciaFilaEspecifica (escalonador->prioridade3, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade3, escalonador->emExecucao, escalonador);
 					break;
 				case 3:
-					gerenciaFilaEspecifica (escalonador->prioridade4, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade4, escalonador->emExecucao, escalonador);
 					break;
 				case 4:
-					gerenciaFilaEspecifica (escalonador->prioridade5, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade5, escalonador->emExecucao, escalonador);
 					break;
 				case 5:
-					gerenciaFilaEspecifica (escalonador->prioridade6, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade6, escalonador->emExecucao, escalonador);
 					break;
 				case 6:
-					gerenciaFilaEspecifica (escalonador->prioridade7, escalonador->emExecucao);
+					gerenciaFilaEspecifica (escalonador->prioridade7, escalonador->emExecucao, escalonador);
 					break;
 				default:
 					break;
 			}
+			exit(0);
 		}
 	}
 	//processo pai: gerencia qual filho está ativo em cada momento
@@ -263,90 +282,79 @@ void escalonamento (Escalonador * escalonador)
 	{
 		if( !filaVazia (escalonador->prioridade1) ) // filho 0 executa
 		{
+			printf("Fila de prioridade 1: num elem: %d\n", escalonador->prioridade1->qntElementos);
 			for(i=1;i<7;i++)
 				kill(pid[i], SIGSTOP);
 
 			kill(pid[0], SIGCONT);
-			flagTempoP6 = 0;
-			flagTempoP7 = 0;
-			sleep(10);
 		}
 		else if( !filaVazia (escalonador->prioridade2) ) // filho 1 executa
 		{
+			printf("Fila de prioridade 2: num elem: %d\n", escalonador->prioridade2->qntElementos);
 			for(i=2;i<7;i++)
 				kill(pid[i], SIGSTOP);
 
 			kill(pid[1], SIGCONT);
-			flagTempoP6 = 0;
-			flagTempoP7 = 0;
-			sleep(10);
 		}
 		else if( !filaVazia (escalonador->prioridade3) ) // filho 2 executa
 		{
+			printf("Fila de prioridade 3: num elem: %d\n", escalonador->prioridade3->qntElementos);
 			for(i=3;i<7;i++)
 				kill(pid[i], SIGSTOP);
 
 			kill(pid[2], SIGCONT);
-			flagTempoP6 = 0;
-			flagTempoP7 = 0;
 		}
 		else if( !filaVazia (escalonador->prioridade4) ) // filho 3 executa
 		{
+			printf("Fila de prioridade 4: num elem: %d\n", escalonador->prioridade4->qntElementos);
 			for(i=4;i<7;i++)
 				kill(pid[i], SIGSTOP);
 
 			kill(pid[3], SIGCONT);
-			flagTempoP6 = 0;
-			flagTempoP7 = 0;
 		}
 		else if( !filaVazia (escalonador->prioridade5) ) // filho 4 executa
 		{
+			printf("Fila de prioridade 5: num elem: %d\n", escalonador->prioridade5->qntElementos);
 			for(i=5;i<7;i++)
 				kill(pid[i], SIGSTOP);
 
 			kill(pid[4], SIGCONT);
-			flagTempoP6 = 0;
-			flagTempoP7 = 0;
 		}
 		else if( !filaVazia (escalonador->prioridade6) ) // filho 5 executa //ROUND_ROBIN
 		{
+			printf("Fila de prioridade 6: num elem: %d\n", escalonador->prioridade6->qntElementos);
 			for(i=6;i<7;i++)
 				kill(pid[i], SIGSTOP);
 
 			kill(pid[5], SIGCONT);
-			flagTempoP7 = 0;
 			
-			if(flagTempoP6 == 0) //nao fizemos sleep para o pai nao ficar parado esperando quando pode ter um processo de prioridade maior chegando
-			{
-				primeiroTempoP6 = clock();
-			}
-			else
-			{
-				dt = (double)((clock() - primeiroTempoP6)/CLOCKS_PER_SEC);
-				if(dt > 2)
-				{
-					flagTempoP6 = 0;
-					kill(pid[5], SIGUSR1); //indica para o filho que a fatia de tempo acabou
-				}
-			}
 		}
 		else if( !filaVazia (escalonador->prioridade7) ) // filho 6 executa //ROUND_ROBIN
 		{
+			printf("Fila de prioridade 7: num elem: %d\n", escalonador->prioridade7->qntElementos);
 			kill(pid[6], SIGCONT);
-			flagTempoP6 = 0;
-			
-			if(flagTempoP7 == 0)
+		}
+
+		// Maneja os tempos de execucao
+		for(i=0;i<7;i++)
+		{
+			if(i != prioridadeAtiva)
 			{
-				primeiroTempoP7 = clock();
+				flagTempos[i] = 0;	
 			}
-			else
+		}
+		if(flagTempos[prioridadeAtiva] == 0)
+		{
+			primeirosTempos[prioridadeAtiva] = clock();
+			flagTempos[prioridadeAtiva] = 1;
+		}
+		else
+		{
+			dt = (double)((clock() - primeirosTempos[prioridadeAtiva])/CLOCKS_PER_SEC);
+			if(dt > maxDt)
 			{
-				dt = (double) ((clock() - primeiroTempoP7)/CLOCKS_PER_SEC);
-				if(dt > 2)
-				{
-					flagTempoP7 = 0;
-					kill(pid[6], SIGUSR1); //indica para o filho que a fatia de tempo acabou
-				}
+				flagTempos[prioridadeAtiva] = 0;
+			//	kill(pid[prioridadeAtiva], SIGUSR1); //indica para o filho que a fatia de tempo acabou
 			}
 		}
 	}
@@ -420,7 +428,7 @@ void escreveStatus (Escalonador * escalonador)
 	FILE* arq; 
 
 	int i = 0;
-	double dt;
+	//clock_t dt;
 
 	arq = fopen ("saida.txt","w");
 	if (arq == NULL)
@@ -435,8 +443,9 @@ void escreveStatus (Escalonador * escalonador)
  		i++;
 		if (escalonador != NULL)
 		{
-			dt = (double) ((clock() - escalonador->inicio)/CLOCKS_PER_SEC);
-			fprintf(arq, "******************** Em t = %f ********************\n", dt);
+			//dt = (clock() - escalonador->inicio)/CLOCKS_PER_SEC;
+			//fprintf(arq, "******************** Em t = %.2f ********************\n", (double) dt);
+			fprintf(arq, "******************** Em t = %d s********************\n", i);
 			fprintf(arq, "***********Status das filas de prontos***********\n");
 			fprintf(arq, "\t**Prioridade 1**\n\n");
 			escreveFilas(arq, escalonador->prioridade1);
