@@ -234,7 +234,7 @@ int checaPrioridade(Escalonador * escalonador, int prioridade)
 		return 1;
 	return 0;
 }
-56
+
 void gerenciaFila (int num, Escalonador * escalonador, Fila *aux, int * pid, int * executando, char ** nomeProg, int * pausados, int * terminados)
 {
 	int pidAux;
@@ -331,9 +331,6 @@ void escalonamento (Escalonador * escalonador)
 	int *terminados;
 	int *terminadosPr6;
 	int *terminadosPr7;
-	int pid [7];
-	int pidPr6[5]; //so podem ter 5 programas de prioridade 6 no round robin ao mesmo tempo
-	int pidPr7[5]; //so podem ter 5 programas de prioridade 7 no round robin ao mesmo tempo
 	int contPr6 = 0;
 	int contPr7 = 0;
 	int emExecPr6 = 0;
@@ -351,28 +348,15 @@ void escalonamento (Escalonador * escalonador)
 	int inicialPr7[5] = {0,0,0,0,0};
 	int flagPr6Cont = 0;
 	int flagPr7Cont = 0;
-	int pidAux;
 	clock_t tempoInicialPr6[5],tempoInicialPr7[5], dt[5], dt7[5];
-	int numId, numId2, numId3;
 	pthread_t threads[N];
 
 	for(i = 0 ; i < N ; i++)
 	{
 		pthread_create(&threads[i], NULL, gerenciaFila, (void*) i+1);
+		threads_IDs[i] = threads[i];
 		pthread_kill(threads[i], SIGSTOP);
 	}
-
-	numId = shmget(IPC_PRIVATE, 7*sizeof(int) , IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
-	terminados = (int*) shmat(numId, 0, 0); 
-	zeraVetor(terminados, 7);
-
-	numId2 = shmget(IPC_PRIVATE, 5*sizeof(int) , IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
-	terminadosPr6 = (int*) shmat(numId2, 0, 0); 
-	zeraVetor(terminadosPr6, 5);
-
-	numId3 = shmget(IPC_PRIVATE, 5*sizeof(int) , IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
-	terminadosPr7 = (int*) shmat(numId3, 0, 0); 
-	zeraVetor(terminadosPr7, 5);
 
 	sleep(1);
 	printf("Comeco escalonamento\n");
