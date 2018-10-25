@@ -6,6 +6,7 @@
 #define N 4
 
 Escalonador* escalonador;
+int flag;
 
 void thread_main (void * t)
 {
@@ -19,9 +20,11 @@ void thread_main (void * t)
 			gerenciaFilaNovos (escalonador);
 			break;
 		case 3:
+			flag = 1;
 			escalonamento (escalonador);
 			break;
 		case 4:
+			while(flag != 1);
 			escreveStatus (escalonador);
 			break;
 		default:
@@ -33,6 +36,8 @@ int main(void)
 {
 	int i;
 	pthread_t threads[N];
+
+	flag = 0;
 
 	escalonador = escalonadorCria ();
 

@@ -16,8 +16,8 @@ void interpretador (void) //joga na memoria compartilhada os nomes e as priorida
 	char * nome;
 	char comando [101], aux[81];
 	int *prioridade;
-	int numPr = 98765;
-	int numNome = 10203040;
+	int numPr = 8850101;
+	int numNome = 3122422;
 	FILE * arq = fopen("exec.txt", "r");
 	if (arq == NULL)
 	{
