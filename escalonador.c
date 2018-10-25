@@ -353,7 +353,7 @@ void escalonamento (Escalonador * escalonador)
 
 	for(i = 0 ; i < N ; i++)
 	{
-		pthread_create(&threads[i], NULL, gerenciaFila, (void*) i+1);
+		pthread_create(&threads[i], NULL, gerenciaFilaRoundRobin, (void*) i+1);
 		threads_IDs[i] = threads[i];
 		pthread_kill(threads[i], SIGSTOP);
 	}
