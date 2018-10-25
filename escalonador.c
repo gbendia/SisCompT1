@@ -233,7 +233,7 @@ int checaPrioridade(Escalonador * escalonador, int prioridade)
 	return 0;
 }
 
-void manejaFila (int num, Escalonador * escalonador, Fila *aux, int * pid, int * executando, char ** nomeProg, int * pausados, int * terminados)
+void gerenciaFila (int num, Escalonador * escalonador, Fila *aux, int * pid, int * executando, char ** nomeProg, int * pausados, int * terminados)
 {
 	int pidAux;
 	if(executando[num] == 0)
@@ -402,23 +402,23 @@ void escalonamento (Escalonador * escalonador)
 		{
 			j=0;
 			
-			manejaFila (1, escalonador, escalonador->prioridade2, pid, executando, nomeProg, pausados, terminados);
+			gerenciaFila (1, escalonador, escalonador->prioridade2, pid, executando, nomeProg, pausados, terminados);
 		}
 		else if( (!filaVazia (escalonador->prioridade3) || executando[2] == 1) && executando[1] == 0 ) 
 		{
 			j=0;
-			manejaFila (2, escalonador, escalonador->prioridade3, pid, executando, nomeProg, pausados, terminados);
+			gerenciaFila (2, escalonador, escalonador->prioridade3, pid, executando, nomeProg, pausados, terminados);
 		}
 		else if( (!filaVazia (escalonador->prioridade4) || executando[3] == 1) && executando[2] == 0  && executando[1] == 0) 
 		{
 			j=0;
-			manejaFila (3, escalonador, escalonador->prioridade4, pid, executando, nomeProg, pausados, terminados);
+			gerenciaFila (3, escalonador, escalonador->prioridade4, pid, executando, nomeProg, pausados, terminados);
 			
 		}
 		else if( (!filaVazia (escalonador->prioridade5) || executando[4] == 1) && executando[3] == 0 && executando[2] == 0  && executando[1] == 0) 
 		{
 			j=0;
-			manejaFila (4, escalonador, escalonador->prioridade5, pid, executando, nomeProg, pausados, terminados);
+			gerenciaFila (4, escalonador, escalonador->prioridade5, pid, executando, nomeProg, pausados, terminados);
 		}
 			else if( (!filaVazia (escalonador->prioridade6) || executando[5] == 1 || confereTerminados(terminadosPr6, contPr6, 1) == 0 ) && executando[4] == 0 && executando[3] == 0 && executando[2] == 0  && executando[1] == 0) //ROUND_ROBIN
 		{
