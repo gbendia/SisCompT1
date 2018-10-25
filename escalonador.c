@@ -11,7 +11,9 @@
 #include <signal.h>
 
 #include "escalonador.h"
+
 #define TEMPOMAX 10
+#define N 7
 
 struct no
 {
@@ -232,7 +234,7 @@ int checaPrioridade(Escalonador * escalonador, int prioridade)
 		return 1;
 	return 0;
 }
-
+56
 void gerenciaFila (int num, Escalonador * escalonador, Fila *aux, int * pid, int * executando, char ** nomeProg, int * pausados, int * terminados)
 {
 	int pidAux;
@@ -352,6 +354,13 @@ void escalonamento (Escalonador * escalonador)
 	int pidAux;
 	clock_t tempoInicialPr6[5],tempoInicialPr7[5], dt[5], dt7[5];
 	int numId, numId2, numId3;
+	pthread_t threads[N];
+
+	for(i = 0 ; i < N ; i++)
+	{
+		pthread_create(&threads[i], NULL, gerenciaFila, (void*) i+1);
+		pthread_kill(threads[i], SIGSTOP);
+	}
 
 	numId = shmget(IPC_PRIVATE, 7*sizeof(int) , IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
 	terminados = (int*) shmat(numId, 0, 0); 
@@ -676,7 +685,13 @@ void escalonamento (Escalonador * escalonador)
 			fflush(stdout);
 			j++;
 		}
+
 	}
+
+	for(i = 0; i < N; i++) {
+		pthread_join(threads[i],NULL); // Espera todas as threads terminarem
+	}	
+
 }
 
 void gerenciaFilaNovos (Escalonador * escalonador)
