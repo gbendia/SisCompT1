@@ -1,4 +1,5 @@
 #include <pthread.h>
+#define N 7
 
 typedef struct no No;
 
@@ -13,6 +14,10 @@ int novoProcesso;
 int escalonamentoTerminou;
 
 int pidInterpretador;
+
+int executando[N];
+
+int pids[N];
 
 Escalonador * escalonadorCria (void);
 
