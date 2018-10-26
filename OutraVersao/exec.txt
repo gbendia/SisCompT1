@@ -1,0 +1,4 @@
+exec P1 prioridade=7
+exec P2 prioridade=2
+exec P3 prioridade=7
+exec P4 prioridade=1

@@ -1,0 +1,231 @@
+Inicio do escalonamento
+******************** Em t = 1 s********************
+***********Status das filas de prontos***********
+	**Prioridade 1**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 2**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 3**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 4**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 5**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 6**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 7**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de terminados***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 6***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 7***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Programa em execucao***********
+	P1---Prioridade: 7
+
+
+******************** Em t = 2 s********************
+***********Status das filas de prontos***********
+	**Prioridade 1**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 2**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 3**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 4**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 5**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 6**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 7**
+
+	Numero de elementos: 1
+	Programa P1 -- Prioridade: 7
+
+
+***********Status das filas de terminados***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 6***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 7***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Programa em execucao***********
+	P2---Prioridade: 2
+
+
+******************** Em t = 3 s********************
+***********Status das filas de prontos***********
+	**Prioridade 1**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 2**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 3**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 4**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 5**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 6**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 7**
+
+	Numero de elementos: 2
+	Programa P1 -- Prioridade: 7
+	Programa P3 -- Prioridade: 7
+
+
+***********Status das filas de terminados***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 6***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 7***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Programa em execucao***********
+	P2---Prioridade: 2
+
+
+Inicio do escalonamento
+******************** Em t = 1 s********************
+***********Status das filas de prontos***********
+	**Prioridade 1**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 2**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 3**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 4**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 5**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 6**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+	**Prioridade 7**
+
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de terminados***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 6***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Status das filas de Em espera da Prioridade 7***********
+	Numero de elementos: 0
+	Nao ha elementos nessa fila
+
+
+***********Programa em execucao***********
+	P1---Prioridade: 7
+
+

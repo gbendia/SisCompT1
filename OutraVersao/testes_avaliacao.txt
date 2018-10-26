@@ -1,0 +1,30 @@
+/****************************************
+*					*
+*	  	 TESTES			*
+*					*
+****************************************/
+
+-- Rodada 1:
+	exec P1 prioridade=4
+	exec P2 prioridade=2
+	exec P3 prioridade=1
+
+-- Rodada 2:
+	exec P1 prioridade=7
+	exec P2 prioridade=6
+	exec P3 prioridade=7
+	exec P4 prioridade=6
+
+-- Rodada 3:
+	exec P1 prioridade=7
+	exec P2 prioridade=6
+	exec P3 prioridade=1
+
+/****************************************
+*					*
+*	  RESULTADOS ESPERADOS		*
+*					*
+****************************************/
+
+-- Resultado esperado Rodada 1:
+
