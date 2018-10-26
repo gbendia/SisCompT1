@@ -1,54 +1,47 @@
 #include "escalonador.h"
 #include "interpretador.h"
+#include "semaforo.h"
 #include <pthread.h>
 #include <stdio.h>
 
-#define N 4
+#define M 4
 
-Escalonador* escalonador;
-int flag;
 
 void thread_main (void * t)
 {
-	int caso = (int) t;
-	switch (caso)
-	{
-		case 1:
-			interpretador ();
-			break;
-		case 2:
-			gerenciaFilaNovos (escalonador);
-			break;
-		case 3:
-			flag = 1;
-			escalonamento (escalonador);
-			break;
-		case 4:
-			while(flag != 1);
-			escreveStatus (escalonador);
-			break;
-		default:
-			printf("Erro na main das threads\n");
-	}
+	escreveStatus (escalonador);
 }
 
 int main(void)
 {
-	int i;
-	pthread_t threads[N];
+	pthread_t threads[1];
 
-	flag = 0;
+	int statloc;
+
+	novoProcesso = 0;
+
+	escalonamentoTerminou = 0;
 
 	escalonador = escalonadorCria ();
 
-	for(i = 0 ; i < N ; i++)
+	pidInterpretador = fork();
+	
+	if(pidInterpretador == 0)
 	{
-		pthread_create(&threads[i], NULL, thread_main, (void*) i+1);
+		interpretador ();
+		exit(0);
 	}
 
-	for(i = 0; i < N; i++) {
-		pthread_join(threads[i],NULL); // Espera todas as threads terminarem
-	}
+	pthread_create(&threads[0], NULL, thread_main, NULL);
+
+	escalonamento(escalonador);
+
+	waitpid(-1, &statloc,0);
+
+	pthread_join(threads[0],NULL); // Espera todas as threads terminarem
+
+	printf("Fim escalonamento \n");
+
 
 	return 0;
 }

@@ -16,15 +16,15 @@ void interpretador (void) //joga na memoria compartilhada os nomes e as priorida
 	char * nome;
 	char comando [101], aux[81];
 	int *prioridade;
-	int numPr = 8850101;
-	int numNome = 3122422;
+	int numPr = 2510195;
+	int numNome = 1308995;
 	FILE * arq = fopen("exec.txt", "r");
 	if (arq == NULL)
 	{
 		printf("Erro na abertura do arquivo de entrada\n");
 		exit(1);
 	}
-
+	
 	while(fscanf(arq," %[^\n]", comando) == 1)
 	{
 		idMemNome = shmget(numNome, 81*sizeof(char), IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
@@ -42,10 +42,17 @@ void interpretador (void) //joga na memoria compartilhada os nomes e as priorida
 
 		strcpy(nome, aux);
 		(*prioridade) = (int) ( comando [strlen(comando)-1] - '0');
+
 		
-		numPr ++;
-		numNome ++;
+		kill(getppid(), SIGUSR1); //avisa para o pai que há um processo novo na memória compartilhada
+
+		kill(getpid(), SIGSTOP); // para até o pai mandar continuar --> indica que leu o dado na memória
+		
+		sleep(1);
+
 	}
+
+	printf("Interpretador terminou\n");
 
 	idMemNome = shmget(numNome, 81*sizeof(char), IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
 	nome = (char*) shmat(idMemNome, 0, 0);

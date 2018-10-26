@@ -8,9 +8,11 @@ typedef struct escalonador Escalonador;
 
 Escalonador* escalonador;
 
-pthread_t threadsIDs[7];
+int novoProcesso;
 
-int threadsPausadas[7];
+int escalonamentoTerminou;
+
+int pidInterpretador;
 
 Escalonador * escalonadorCria (void);
 
